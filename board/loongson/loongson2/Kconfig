@@ -1,0 +1,16 @@
+if TARGET_LOONGSON2
+
+config SYS_BOARD
+	default "loongson2"
+
+config SYS_VENDOR
+	default "loongson"
+
+config SYS_CONFIG_NAME
+	default "loongson2"
+
+config SYS_TEXT_BASE
+	default 0x9fc00000 if 32BIT
+	default 0xffffffff9fc00000 if 64BIT
+
+endif
