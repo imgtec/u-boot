@@ -36,7 +36,7 @@ LEAF(lowlevel_init)
 	jr	s0
 	END(lowlevel_init)
 
-LEAF(lowlevel_display)
+LEAF(__lowlevel_display)
 	.set	push
 	.set	noat
 	PTR_LI	AT, BOSTON_LCD_BASE
@@ -51,4 +51,40 @@ LEAF(lowlevel_display)
 #endif
 	.set	pop
 	jr	ra
-	END(lowlevel_display)
+END(__lowlevel_display)
+
+/* How to use it?
+   Adjust TextBase to FFFFFFFF81000000
+
+	li   a0, 'A'
+	bal  lowlevel_display
+	nop
+*/
+
+#define COM1_BASE_ADDR 0xbfe00000
+#define LSR_TXRDY       0x20    /* transmitter ready */
+#define NSREG(x)        (x) 
+#define      NS16550_LSR     5 
+#define      NS16550_DATA    0
+
+LEAF(lowlevel_display)
+        .set noat
+        move    AT, ra
+        la      v0, COM1_BASE_ADDR
+        bal     1f
+        nop
+        jr      AT
+        nop
+
+1:
+        lbu     v1, NSREG(NS16550_LSR)(v0)
+        and     v1, LSR_TXRDY
+        beqz    v1, 1b
+        nop
+
+        sb      a0, NSREG(NS16550_DATA)(v0)
+        j       ra
+        nop
+        .set at
+END(lowlevel_display)
+
