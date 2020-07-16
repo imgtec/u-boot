@@ -136,7 +136,6 @@ config TARGET_LOONGSON2
 	bool "Support Loongson2"
 	select DM
 	select DM_SERIAL
-	select MIPS_CM
 	select MIPS_L1_CACHE_SHIFT_6
 	select MIPS_L2_CACHE
 	select OF_BOARD_SETUP
@@ -270,7 +269,6 @@ config MIPS_CM_BASE
 	hex "MIPS CM GCR Base Address"
 	depends on MIPS_CM
 	default 0x16100000 if TARGET_BOSTON
-	default 0x16100000 if TARGET_LOONGSON2
 	default 0x1fbf8000
 	help
 	  The physical base address at which to map the MIPS Coherence Manager
