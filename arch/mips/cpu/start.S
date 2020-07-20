@@ -132,6 +132,20 @@ ENTRY(_start)
 #endif
 
 reset:
+	bal	lowlevel_display
+	  addi	a0, a0, 1
+
+
+	bal	lowlevel_display_gpio
+	  nop
+
+	b	reset
+	  nop
+
+
+
+
+/* 测测 GPIO 翻转 */
 #if __mips_isa_rev >= 6
 	mfc0	t0, CP0_CONFIG, 5
 	and	t0, t0, MIPS_CONF5_VP
@@ -156,6 +170,18 @@ reset:
 3:	wait
 	b	3b
 	 nop
+
+//	bal	initserial
+
+999:
+	b	999b
+
+	li	a0, 0xAA
+	bal	lowlevel_display
+
+	li	a0, 0x55
+	bal	lowlevel_display
+b 999b
 
 	/* Init CP0 Status */
 4:	mfc0	t0, CP0_STATUS
