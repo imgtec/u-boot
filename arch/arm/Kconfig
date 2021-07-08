@@ -983,6 +983,40 @@ config ARCH_SOCFPGA
 	imply SPL_SPI_SUPPORT
 	imply L2X0_CACHE
 
+config ARCH_SPRD
+	bool "Support SPRD SoCs"
+	select BLK
+	select BINMAN if SPL_OPTEE
+	select DM
+	select DM_GPIO
+	select DM_I2C
+	select DM_MMC
+	select DM_PWM
+	select DM_REGULATOR
+	select DM_SERIAL
+	select DM_SPI
+	select DM_SPI_FLASH
+	select DM_USB if USB
+	select ENABLE_ARM_SOC_BOOT0_HOOK
+	select OF_CONTROL
+	select SPI
+	select SPL_DM if SPL
+	select SPL_DM_SPI if SPL
+	select SPL_DM_SPI_FLASH if SPL
+	select SYS_MALLOC_F
+	select SYS_THUMB_BUILD if !ARM64
+	imply ADC
+	imply CMD_DM
+	imply DEBUG_UART_BOARD_INIT
+	imply DISTRO_DEFAULTS
+	imply FAT_WRITE
+	imply SARADC_ROCKCHIP
+	imply SPL_SYSRESET
+	imply SPL_SYS_MALLOC_SIMPLE
+	imply SYS_NS16550
+	imply TPL_SYSRESET
+	imply USB_FUNCTION_FASTBOOT
+
 config ARCH_SUNXI
 	bool "Support sunxi (Allwinner) SoCs"
 	select BINMAN
@@ -1950,6 +1984,8 @@ source "arch/arm/mach-s5pc1xx/Kconfig"
 source "arch/arm/mach-snapdragon/Kconfig"
 
 source "arch/arm/mach-socfpga/Kconfig"
+
+source "arch/arm/mach-sprd/Kconfig"
 
 source "arch/arm/mach-sti/Kconfig"
 

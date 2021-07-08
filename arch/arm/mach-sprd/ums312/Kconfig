@@ -1,0 +1,20 @@
+if SPRD_UMS312
+
+config TARGET_RP3_UMS312
+	bool "UMS312 RP3 board"
+	select BOARD_LATE_INIT
+	help
+	  UMS312 RP3 is not a evaluation board for SPRD UMS312.
+
+config SPRD_BOOT_MODE_REG
+	default 0xfdc20200
+
+config SYS_SOC
+	default "ums312"
+
+config SYS_MALLOC_F_LEN
+	default 0x2000
+
+source "board/sprd/rp3_ums312/Kconfig"
+
+endif

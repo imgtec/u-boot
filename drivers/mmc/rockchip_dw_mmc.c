@@ -14,8 +14,8 @@
 #include <pwrseq.h>
 #include <syscon.h>
 #include <asm/gpio.h>
-#include <asm/arch-rockchip/clock.h>
-#include <asm/arch-rockchip/periph.h>
+#include <asm/arch-sprd/clock.h>
+#include <asm/arch-sprd/periph.h>
 #include <linux/delay.h>
 #include <linux/err.h>
 

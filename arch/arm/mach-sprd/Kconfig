@@ -1,0 +1,157 @@
+if ARCH_SPRD
+
+config SPRD_RK3568
+	bool "Support Rockchip RK3568"
+	select ARM64
+	select CLK
+	select PINCTRL
+	select RAM
+	select REGMAP
+	select SYSCON
+	select BOARD_LATE_INIT
+	imply SPRD_COMMON_BOARD
+	help
+	  The Rockchip RK3568 is a ARM-based SoC with quad-core Cortex-A55,
+	  including NEON and GPU, 512K L3 cache, Mali-G52 based graphics,
+	  two video interfaces supporting HDMI and eDP, several DDR3 options
+	  and video codec support. Peripherals include Gigabit Ethernet,
+	  USB2 host and OTG, SDIO, I2S, UARTs, SPI, I2C and PWMs.
+
+config SPRD_UMS312
+	bool "Support SPRD UMS312"
+	select ARM64
+	select CLK
+	select PINCTRL
+	select RAM
+	select REGMAP
+	select SYSCON
+	select BOARD_LATE_INIT
+	imply SPRD_COMMON_BOARD
+	help
+	  The Rockchip RK3568 is a ARM-based SoC with quad-core Cortex-A55,
+	  including NEON and GPU, 512K L3 cache, Mali-G52 based graphics,
+	  two video interfaces supporting HDMI and eDP, several DDR3 options
+	  and video codec support. Peripherals include Gigabit Ethernet,
+	  USB2 host and OTG, SDIO, I2S, UARTs, SPI, I2C and PWMs.
+
+config SPRD_USB_UART
+	bool "Route uart output to usb pins"
+	help
+	  Rockchip SoCs have the ability to route the signals of the debug
+	  uart through the d+ and d- pins of a specific usb phy to enable
+	  some form of closed-case debugging. With this option supported
+	  SoCs will enable this routing as a debug measure.
+
+config SPL_SPRD_BACK_TO_BROM
+	bool "SPL returns to bootrom"
+	default y if SPRD_RK3036
+	select SPRD_BROM_HELPER
+	select SPL_BOOTROM_SUPPORT
+	depends on SPL
+	help
+	  Rockchip SoCs have ability to load SPL & U-Boot binary. If enabled,
+          SPL will return to the boot rom, which will then load the U-Boot
+          binary to keep going on.
+
+config TPL_SPRD_BACK_TO_BROM
+	bool "TPL returns to bootrom"
+	default y
+	select SPRD_BROM_HELPER
+	select TPL_BOOTROM_SUPPORT
+	depends on TPL
+	help
+	  Rockchip SoCs have ability to load SPL & U-Boot binary. If enabled,
+          SPL will return to the boot rom, which will then load the U-Boot
+          binary to keep going on.
+
+config SPRD_COMMON_BOARD
+	bool "Sprd common board file"
+	help
+	  Rockchip SoCs have similar boot process, Common board file is mainly
+	  in charge of common process of board_init() and board_late_init() for
+	  U-Boot proper.
+
+config SPRD_COMMON_BOARD
+	bool "Sprd common board file"
+	help
+	  Rockchip SoCs have similar boot process, Common board file is mainly
+	  in charge of common process of board_init() and board_late_init() for
+	  U-Boot proper.
+
+config SPL_SPRD_COMMON_BOARD
+	bool "Rockchip SPL common board file"
+	depends on SPL
+	help
+	  Rockchip SoCs have similar boot process, SPL is mainly in charge of
+	  load and boot Trust ATF/U-Boot firmware, and DRAM init if there is
+	  no TPL for the board.
+
+config TPL_SPRD_COMMON_BOARD
+	bool "Rockchip TPL common board file"
+	depends on TPL
+	help
+	  Rockchip SoCs have similar boot process, prefer to use TPL for DRAM
+	  init and back to bootrom, and SPL as Trust ATF/U-Boot loader. TPL
+	  common board is a basic TPL board init which can be shared for most
+	  of SoCs to avoid copy-paste for different SoCs.
+
+config SPRD_BOOT_MODE_REG
+	hex "Rockchip boot mode flag register address"
+	help
+	  The Soc will enter to different boot mode(defined in asm/arch-rockchip/boot_mode.h)
+	  according to the value from this register.
+
+config SPRD_SPL_RESERVE_IRAM
+	hex "Size of IRAM reserved in SPL"
+	default 0
+	help
+	  SPL may need reserve memory for firmware loaded by SPL, whose load
+	  address is in IRAM and may overlay with SPL text area if not
+	  reserved.
+
+config SPRD_BROM_HELPER
+	bool
+
+config SPL_SPRD_EARLYRETURN_TO_BROM
+        bool "SPL requires early-return (for RK3188-style BROM) to BROM"
+	depends on SPL && ENABLE_ARM_SOC_BOOT0_HOOK
+	help
+	  Some Rockchip BROM variants (e.g. on the RK3188) load the
+	  first stage in segments and enter multiple times. E.g. on
+	  the RK3188, the first 1KB of the first stage are loaded
+	  first and entered; after returning to the BROM, the
+	  remainder of the first stage is loaded, but the BROM
+	  re-enters at the same address/to the same code as previously.
+
+	  This enables support code in the BOOT0 hook for the SPL stage
+	  to allow multiple entries.
+
+config TPL_SPRD_EARLYRETURN_TO_BROM
+        bool "TPL requires early-return (for RK3188-style BROM) to BROM"
+	depends on TPL && ENABLE_ARM_SOC_BOOT0_HOOK
+	help
+	  Some Rockchip BROM variants (e.g. on the RK3188) load the
+	  first stage in segments and enter multiple times. E.g. on
+	  the RK3188, the first 1KB of the first stage are loaded
+	  first and entered; after returning to the BROM, the
+	  remainder of the first stage is loaded, but the BROM
+	  re-enters at the same address/to the same code as previously.
+
+	  This enables support code in the BOOT0 hook for the TPL stage
+	  to allow multiple entries.
+
+config SPL_MMC_SUPPORT
+	default y if !SPL_SPRD_BACK_TO_BROM
+
+config SPRD_SPI_IMAGE
+	bool "Build a SPI image for rockchip"
+	depends on HAS_ROM
+	help
+	  Some Rockchip SoCs support booting from SPI flash. Enable this
+	  option to produce a 4MB SPI-flash image (called u-boot.rom)
+	  containing U-Boot. The image is built by binman. U-Boot sits near
+	  the start of the image.
+
+source "arch/arm/mach-sprd/ums312/Kconfig"
+
+endif

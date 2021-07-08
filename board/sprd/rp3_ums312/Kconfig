@@ -1,0 +1,15 @@
+if TARGET_RP3_UMS312
+
+config SYS_BOARD
+	default "rp3_ums312"
+
+config SYS_VENDOR
+	default "sprd"
+
+config SYS_CONFIG_NAME
+	default "rp3_ums312"
+
+config BOARD_SPECIFIC_OPTIONS # dummy
+	def_bool y
+
+endif

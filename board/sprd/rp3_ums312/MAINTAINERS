@@ -1,0 +1,6 @@
+RP3-UMS312
+M:      Du Huanpeng <dhu@hodcarrier.org>
+S:      Maintained
+F:      board/sprd/rp3_ums312
+F:      include/configs/rp3_ums312.h
+F:      configs/rp3-ums312_defconfig
